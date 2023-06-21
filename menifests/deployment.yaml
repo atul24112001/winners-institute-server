@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: winners-institute-server
+  name: winners-institute-server
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: winners-institute-server
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: winners-institute-server
+    spec:
+      containers:
+        - image: atul24112001/winners-institute-server:0.0.1-RELEASE
+          imagePullPolicy: IfNotPresent
+          name: currency-exchange
+          command: ["npm", "start"]
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: winners-institute-server
+  name: winners-institute-server
+  namespace: default
+spec:
+  ports:
+    - port: 8000
+      protocol: TCP
+      targetPort: 8000
+      name: http
+  selector:
+    app: winners-institute-server
+  sessionAffinity: None
+  type: LoadBalancer
