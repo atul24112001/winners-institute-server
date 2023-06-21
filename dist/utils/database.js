@@ -15,16 +15,16 @@ let _client = null;
 let _db = null;
 const mongoConnect = (callback) => __awaiter(void 0, void 0, void 0, function* () {
     const url = process.env.DATABASE_CONNECTION_STRING;
+    console.log("DATABASE_CONNECTION_STRING", url);
     if (typeof url === "string") {
-        try {
-            _client = yield mongodb_1.MongoClient.connect(url);
-            _db = _client.db("winners_institute");
+        yield mongodb_1.MongoClient.connect(url).then(client => {
+            _client = client;
+            _db = client.db("winners_institute");
             console.log("connected!");
             callback();
-        }
-        catch (error) {
+        }).catch(error => {
             console.log(error);
-        }
+        });
     }
 });
 exports.mongoConnect = mongoConnect;

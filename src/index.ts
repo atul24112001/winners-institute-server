@@ -6,9 +6,7 @@ import { mongoConnect } from "./utils/database";
 import masterRoute from "./routes/master.routes";
 import adminRoutes from "./routes/admin.routes";
 
-require("dotenv").config({
-    path: path.join(__dirname, `../.env.${process.env.NODE_ENV}`)
-})
+require("dotenv").config();
 
 const PORT = process.env.PORT;
 
@@ -27,10 +25,6 @@ app.get("/", async (req: Request, res: Response) => {
     res.send(`<h1 style="text-align: center;">Winner server up an running</h1>`)
 })
 
-// api.use((error: ErrorRequestHandler, request: express.Request, response: express.Response, next: express.NextFunction) => {
-//     response.status(500).end()
-//   })
-
 app.use("/api/master", masterRoute);
 app.use("/api/admin", adminRoutes);
 
@@ -40,8 +34,10 @@ if (typeof connectionString !== "string") {
     throw new Error("Connection string not provided.")
 }
 
-mongoConnect(() => {
-    app.listen(PORT, () => {
+
+app.listen(PORT, () => {
+    console.log("App started")
+    mongoConnect(() => {
         console.log("Server running on port: " + PORT);
     })
 })

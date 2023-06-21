@@ -25,8 +25,7 @@ spec:
       containers:
         - image: atul24112001/winners-institute-server:0.0.1-RELEASE
           imagePullPolicy: IfNotPresent
-          name: currency-exchange
-          command: ["npm", "start"]
+          name: winners-institute-server
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
 

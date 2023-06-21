@@ -5,15 +5,17 @@ let _db: null | Db = null;
 
 export const mongoConnect = async (callback: CallableFunction) => {
     const url = process.env.DATABASE_CONNECTION_STRING;
+    console.log("DATABASE_CONNECTION_STRING", url);
     if (typeof url === "string") {
-        try {
-            _client = await MongoClient.connect(url);
-            _db = _client.db("winners_institute")
+        await MongoClient.connect(url).then(client => {
+            _client = client;
+            _db = client.db("winners_institute")
             console.log("connected!");
             callback();
-        } catch (error) {
-            console.log(error);
-        }
+        }).catch(error => {
+            console.log(error)
+        });
+
     }
 }
 
